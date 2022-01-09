@@ -10,8 +10,8 @@ The Official User Guide is available at https://www.amazon.com/dp/B09Q28DRTJ
 # Release Schedule
 Whenever the code base is updated, a new standalone executable is created and replaced with the existing executable.
 
-Version         Date                Description
-1.0.0         01/09/2022        Initial release
+    Version         Date                Description
+    1.0.0         01/09/2022        Initial release
 
 # EOL or End-of-Life
 When a piece of software is useful, there should never be an EOL doctrine. The intention for this application is to achieve immoratlity ;).
