@@ -1,0 +1,80 @@
+{
+  "name": "checkbook-writer",
+  "version": "1.0.0",
+  "description": "Checkbook is a self-contained API server. Back in the early 1980's, I developed a Checkwriter device using a two line alpha numeric LCD display, a small QWERTY keyboard and an embedded ink jet printer with sealed check cartridge to print the check and eject. There was no internet nor any smart phones or IOT devices. This project is a reconcilation of that project using current technology.",
+  "main": "app.js",
+  "build": {
+    "appId": "work.pingleware.checkbook-writer",
+    "productName": "checkbook-writer",
+    "copyright": "Copyright © 1980-2022 ${author}",
+    "win": {
+      "icon": "assets/logo.png"
+    },
+    "linux": {
+      "target": "deb",
+      "icon": "assets/logo.png",
+      "category": "Office",
+      "description": "Checkbook Writer"
+    },
+    "files": [],
+    "extraFiles": [
+      "data/bank.db",
+      "settings.json"
+    ]
+  },
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "pack-arm64": "electron-builder --dir --arm64",
+    "dist-arm64": "electron-builder --arm64",
+    "pack-armv7l": "electron-builder --dir --armv7l",
+    "dist-armv7l": "electron-builder --armv7l",
+    "pack-macos": "electron-builder --dir --macos",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pingleware/checkbook.git"
+  },
+  "keywords": [
+    "checkwriter",
+    "checkbook",
+    "pingleware"
+  ],
+  "author": {
+    "name": "PressPage Entertainment Inc",
+    "email": "presspage.entertainment@gmail.com"
+  },
+  "maintainers": [
+    {
+      "name": "PressPage Entertainment Inc DBA PINGLEWARE",
+      "email": "maintainers@pingleware.work"
+    },
+    {
+      "name": "Patrick O. Ingle",
+      "email": "me@patrickingle.info"
+    }
+  ],
+  "license": "CC-BY-4.0",
+  "bugs": {
+    "url": "https://github.com/pingleware/checkbook/issues"
+  },
+  "homepage": "https://github.com/pingleware/checkbook#readme",
+  "devDependencies": {
+    "cross-var": "^1.1.0",
+    "electron": "^16.0.6",
+    "electron-builder": "^22.14.5"
+  },
+  "dependencies": {
+    "api": "^4.2.0",
+    "body-parser": "latest",
+    "config.json": "^0.0.4",
+    "cors": "^2.8.5",
+    "dom-to-image": "^2.6.0",
+    "express": "^4.17.2",
+    "follow-redirects": "^1.14.6",
+    "path": "^0.12.7",
+    "sqlite3": "^5.0.2"
+  }
+}

@@ -1,0 +1,24 @@
+{
+    "file": "data/bank.db",
+    "host": "localhost",
+    "port": 3000,
+    "checkwriter": {
+        "signup_url": "https://app.onlinecheckwriter.com/?print_check=356086",
+        "api_key": "<SIGNUP AT THE LINK ABOVE>"
+    },
+    "checkbook.io": {
+        "environment": "sandbox",
+        "sandbox": {
+            "signup_url": "https://demo.app.checkbook.io/account?register&referral_code=G81ISN",
+            "hostname": "sandbox.checkbook.io",
+            "endpoint": "https://sandbox.checkbook.io/v3/",
+            "authorization": ""
+        },
+        "live": {
+            "signup_url": "https://demo.app.checkbook.io/account?register&referral_code=G81ISN",
+            "hostname": "checkbook.io",
+            "endpoint": "https://checkbook.io/v3/",
+            "authorization": ""
+        }
+    }
+}

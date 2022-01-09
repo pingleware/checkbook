@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <title>Checkbook Writer</title>
+        <style>
+            .inputfile {
+                /* visibility: hidden etc. wont work */
+                width: 0.1px;
+                height: 0.1px;
+                opacity: 0;
+                overflow: hidden;
+                position: absolute;
+                z-index: -1;
+            }
+            .inputfile:focus + label {
+                /* keyboard navigation */
+                outline: 1px dotted #000;
+                outline: -webkit-focus-ring-color auto 5px;
+            }
+            .inputfile + label * {
+                pointer-events: none;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- HEADER -->
+        <div class="w3-container w3-blue w3-top">
+            <h4>Checkbook Writer</h4>
+        </div>
+        <!-- MAIN -->
+        <div class="w3-container" id="main">
+            <br/><br/>
+            <div class="w3-panel w3-center">
+                <table class="w3-table">
+                    <tr>
+                        <td><label for="bank"><b>Bank</b></label></td>
+                        <td>
+                            <select class="w3-input" id="bank" onchange="changeBank(this)">
+                                <option value="">Select Bank</option>
+                            </select>
+                        </td>
+                        <td><label for="bank-balance"><b>Bank Balance</b></label></td>
+                        <td><input type="number" steps="any" id="bank-balance" value="0.00" class="w3-input w3-block" /></td>
+                        <td><button class="w3-button w3-green w3-block" id="addbank">Add Bank</button></td>
+                        <td><button class="w3-button w3-yellow w3-block" onclick="document.getElementById('account-holder-dialog').style.display='block';">Setup User/Account holder</button></td>
+                    </tr>
+                </table>
+                <fieldset>
+                    <legend>Check Fields</legend>
+                    <table class="w3-table" border="1">
+                        <tr>
+                            <td colspan="2" id="accountholder-meta">Account Holder Name<br/>Address</td>
+                            <td></td>
+                            <td><input type="number" id="checkno" value="1001" class="w3-input w3-light-grey" /></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"></td>
+                            <td class="w3-right-align">Date</td>
+                            <td><input type="date" id="checkdate" value="" class="w3-input" /></td>
+                        </tr>
+                        <tr>
+                            <td class="w3-tiny" style="width:10%">PAY TO THE<br/>ORDER OF</td>
+                            <td colspan="2">
+                                <input type="text" class="w3-input" id="checkpayee" value="" list="recipients" onchange="updatePayee(this)" />
+                                <button class="w3-button w3-blue w3-block" id="addrecipient">Add Payee</button>
+                                <datalist id="recipients"></datalist>
+                            </td>
+                            <td>$<input type="number" steps="any" id="checkamount" class="w3-input" value="" /></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"><input type="text" class="w3-input w3-light-grey" id="checkwrittenamount" value="" readonly /></td>
+                            <td style="width:10%">DOLLARS <i class="fa fa-lock" aria-hidden="true"></i></td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" id="bankinfo">Bank Name<br/>Bank Address<br/>City, State, Zip</td>
+                        </tr>
+                        <tr>
+                            <td class="w3-tiny">Memo</td>
+                            <td><input type="text" class="w3-input" id="checkmemo" value="" /></td>
+                            <td colspan="2">
+                                <input type="file" accept="image/*"  id="checksignature" class="inputfile" />
+                                <label for="checksignature">Choose a signature file (Click me)</label><br/>
+                                <img id="checksignature-image" />
+                            </td>
+                        </tr>
+                    </table>
+                    <table class="w3-table" border="1">
+                        <tr>
+                            <td id="checkrouting" class="w3-small">
+                                <img src="../assets/svgs/u2446.svg" style="width:5%">
+                                <img src="../assets/svgs/u0030.svg" style="width:5%">
+                                <img src="../assets/svgs/u0030.svg" style="width:5%">
+                                <img src="../assets/svgs/u0030.svg" style="width:5%">
+                                <img src="../assets/svgs/u0030.svg" style="width:5%">
+                                <img src="../assets/svgs/u0030.svg" style="width:5%">
+                                <img src="../assets/svgs/u0030.svg" style="width:5%">
+                                <img src="../assets/svgs/u0030.svg" style="width:5%">
+                                <img src="../assets/svgs/u0030.svg" style="width:5%">
+                                <img src="../assets/svgs/u0030.svg" style="width:5%">
+                            </td>
+                            <td id="checkaccount" class="w3-small">
+                                <img src="../assets/svgs/u2446.svg" style="width:5%">
+                                <img src="../assets/svgs/u0030.svg" style="width:5%">
+                                <img src="../assets/svgs/u0030.svg" style="width:5%">
+                                <img src="../assets/svgs/u0030.svg" style="width:5%">
+                                <img src="../assets/svgs/u0030.svg" style="width:5%">
+                                <img src="../assets/svgs/u0030.svg" style="width:5%">
+                                <img src="../assets/svgs/u0030.svg" style="width:5%">
+                                <img src="../assets/svgs/u0030.svg" style="width:5%">
+                                <img src="../assets/svgs/u0030.svg" style="width:5%">
+                                <img src="../assets/svgs/u0030.svg" style="width:5%">
+                            </td>
+                            <td id="checknumber" class="w3-small">
+                                <img src="../assets/svgs/u2448.svg" style="width:5%">
+                                <img src="../assets/svgs/u0031.svg" style="width:5%">
+                                <img src="../assets/svgs/u0030.svg" style="width:5%">
+                                <img src="../assets/svgs/u0030.svg" style="width:5%">
+                                <img src="../assets/svgs/u0031.svg" style="width:5%">
+                            </td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <button class="w3-button w3-block w3-black" id="printsendcheck">Print|Send Check</button>
+                </fieldset>
+            </div>
+            <div class="w3-panel">
+                <fieldset>
+                    <legend>Check Register</legend>
+                    <table class="w3-table w3-striped" id="checkregister-table">
+                        <tr>
+                            <th>Date</th>
+                            <th>No</th>
+                            <th>Payee/Description</th>
+                            <th>Amount</th>
+                        </tr>
+                        <tr>
+                            <td colspan="5" class="w3-center"><i>Select a bank to view the register?</i></td>
+                        </tr>
+                    </table>
+                </fieldset>
+            </div>
+            <br/><br/><br/><br/>
+        </div>
+        <!-- FOOTER -->
+        <div class="w3-container w3-card w3-blue w3-bottom">
+            <p class="w3-center">
+                &copy; 1980-<span id="year"></span> <a href="https://presspage.info" target="_blank" style="text-decoration: none;">PressPage Entertainment Inc.</a> DBA <a href="https://pingleware.work" target="_blank" style="text-decoration: none;">PINGLEWARE</a>
+                &nbsp;All rights reserved.
+                &nbsp;<span class="w3-tiny" id="version"></span>
+                &nbsp;<a href="https://www.amazon.com/dp/B09Q28DRTJ" target="_system" style="text-decoration: none;" class="fa fa-question-circle" aria-hidden="true"></a>
+            </p>
+        </div>
+        <!-- SUCCESS DIALOG -->
+        <div id="success-dialog" class="w3-modal">
+            <div class="w3-modal-content">
+                <div class="w3-container">
+                    <h2 class="w3-green" id="success-dialog-title">Success</h2>
+                    <p id="success-dialog-message"></p>
+                    <br />
+                    <button class="w3-button w3-block w3-black" id="success-dialog-ok">OK</button>
+                    <br />    
+                </div>
+            </div>
+        </div>
+        <!-- ERROR DIALOG -->
+        <div id="error-dialog" class="w3-modal">
+            <div class="w3-modal-content">
+                <div class="w3-container">
+                    <h2 class="w3-red" id="error-dialog-title">Error</h2>
+                    <p id="error-dialog-message"></p>
+                    <br />
+                    <button class="w3-button w3-block w3-black" id="error-dialog-ok">OK</button>
+                    <br />
+                </div>
+            </div>
+        </div>
+        <!-- CONFIRM DIALOG -->
+        <div id="confirm-dialog" class="w3-modal">
+            <div class="w3-modal-content">
+                <div class="w3-container">
+                    <h2 class="w3-red" id="confirm-dialog-title">Error</h2>
+                    <p id="confirm-dialog-message"></p>
+                    <br />
+                    <button class="w3-button w3-block w3-light-grey" id="confirm-dialog-yes">Yes</button>
+                    <br />
+                    <button class="w3-button w3-block w3-light-grey" id="confirm-dialog-no">No</button>
+                    <br />
+                </div>
+            </div>
+        </div>
+        <!-- ACCOUNT HOLDER DIALOG -->
+        <div id="account-holder-dialog" class="w3-modal">
+            <div class="w3-modal-content">
+                <div class="w3-container">
+                    <h2 class="w3-yellow">Account Holder</h2>
+                    <label for="account-holder-name">Name</label>
+                    <input type="text" class="w3-input w3-block" id="account-holder-name" value="" />
+                    <label for="account-holder-address">Address</label>
+                    <input type="text" class="w3-input w3-block" id="account-holder-address" value="" />
+                    <label for="account-holder-csz">City, State and Zip code</label>
+                    <input type="text" class="w3-input w3-block" id="account-holder-csz" value="" />
+                    <br />
+                    <button class="w3-button w3-block w3-black" id="account-holder-save">Save</button>
+                    <br/>
+                    <button class="w3-button w3-block w3-orange" onclick="document.getElementById('account-holder-dialog').style.display='none';">Cancel</button>
+                    <br />
+                </div>
+            </div>
+        </div>
+        <!-- NEW BANK DIALOG -->
+        <div id="new-bank-dialog" class="w3-modal">
+            <div class="w3-modal-content">
+                <div class="w3-container">
+                    <h2 class="w3-yellow">Add New Bank</h2>
+                    <label for="new-bank-name">Name</label>
+                    <input type="text" class="w3-input w3-block" id="new-bank-name" value="" />
+                    <label for="new-bank-address">Address</label>
+                    <input type="text" class="w3-input w3-block" id="new-bank-address" value="" />
+                    <label for="new-bank-csz">City, State and Zip code</label>
+                    <input type="text" class="w3-input w3-block" id="new-bank-csz" value="" />
+                    <label for="new-bank-phone">Phone</label>
+                    <input type="text" class="w3-input w3-block" id="new-bank-phone" value="" />
+                    <label for="new-bank-url">URL</label>
+                    <input type="url" class="w3-input w3-block" id="new-bank-url" value="" />
+                    <label for="new-bank-rtn">Routing Number</label>
+                    <input type="text" class="w3-input w3-block" id="new-bank-rtn" value="" />
+                    <label for="new-bank-account">Account Number</label>
+                    <input type="text" class="w3-input w3-block" id="new-bank-account" value="" />
+                    <br />
+                    <button class="w3-button w3-block w3-black" id="new-bank-save">Save</button>
+                    <br/>
+                    <button class="w3-button w3-block w3-yellow" id="import-bank-accounts" title="Could create duplpicate entries?">Import from CHECKBOOK.IO</button>
+                    <br />
+                    <button class="w3-button w3-block w3-orange" onclick="document.getElementById('new-bank-dialog').style.display='none';">Cancel</button>
+                    <br />
+                </div>
+            </div>
+        </div>
+        <!-- RECIPIENT DIALOG -->
+        <div class="w3-modal" id="recipient-dialog">
+            <div class="w3-modal-content">
+                <div class="w3-container">
+                    <h2 class="w3-yellow">Add Payee/Recipient</h2>
+                    <label for="recipient-name">Name</label>
+                    <input type="text" id="recipient-name" class="w3-input w3-block" value="" />
+                    <label for="recipient-line-1">Address Line 1</label>
+                    <input type="text" id="recipient-line-1" class="w3-input w3-block" value="" />
+                    <label for="recipient-">Address Line 2</label>
+                    <input type="text" id="recipient-line-2" class="w3-input w3-block" value="" />
+                    <label for="recipient-">City</label>
+                    <input type="text" id="recipient-city" class="w3-input w3-block" value="" />
+                    <label for="recipient-">State</label>
+                    <input type="text" id="recipient-state" class="w3-input w3-block" value="" />
+                    <label for="recipient-zip">Postal Code</label>
+                    <input type="text" id="recipient-zip" class="w3-input w3-block" value="" />
+                    <label for="recipient-country">Country</label>
+                    <input type="text" id="recipient-country" class="w3-input w3-block" value="" />
+                    <br/>
+                    <button class="w3-button w3-block w3-black" id="recipient-save">Save</button>
+                    <br />
+                    <button class="w3-button w3-block w3-orange" onclick="document.getElementById('recipient-dialog').style.display='none';">Cancel</button>
+                    <br/>
+                </div>
+            </div>
+        </div>
+        <!-- JavaScript References-->
+        <script type="text/javascript" src="js/index.min.js"></script>
+        <script type="text/javascript">
+            var recipient = null;
+
+            window.onload = function(e) {
+                id('version').innerHTML = 'Version ' + localStorage.getItem('version');
+                id('year').innerHTML = new Date().toISOString().split('-')[0];
+
+                id('account-holder-name').value = localStorage.getItem('account-holder-name');
+                id('account-holder-address').value = localStorage.getItem('account-holder-address');
+                id('account-holder-csz').value = localStorage.getItem('account-holder-csz');
+
+                if (id('account-holder-name').value.length > 0) {
+                    id('accountholder-meta').innerHTML = id('account-holder-name').value + '<br/>' + id('account-holder-address').value + '<br/>' + id('account-holder-csz').value;
+                } else {
+                    id('accountholder-meta').innerHTML = 'Account Holder Name<br/>Address';
+                }
+
+                SendIPC('getBankAccounts',{}, function(channel, event, accounts){
+                    console.log(accounts);
+                    accounts.forEach(function(account){
+                        var option = new Option(account.bankname);
+                        option.setAttribute('data-bank', btoa(JSON.stringify(account)));
+                        id('bank').add(option);
+                    });
+                });
+
+                SendIPC('getRecipients',{}, function(channel, event, recipients){
+                    console.log(recipients);
+                    recipients.forEach(function(recipient){
+                        var attr = btoa(JSON.stringify(recipient));
+                        id('recipients').innerHTML += `<option data-recipient="${attr}">${recipient.name}</option>`;
+                    });
+                });
+            }
+
+            listener('checkamount', 'click', function(e){
+                id('checkwrittenamount').value = nbr2txt(this.value);
+            });
+
+            listener('checkno','click', function(e){
+                var value = this.value;
+                id('checknumber').innerHTML = '<img src="../assets/svgs/u2448.svg" style="width:5%">';
+                for (var i=0; i<value.length; i++) {
+                    var num = value[i];
+                    id('checknumber').innerHTML += `<img src="../assets/svgs/u003${num}.svg" style="width:5%">`;
+                }
+            });
+
+            listener('checksignature','onchange',function () {
+                var src = URL.createObjectURL(this.files[0])
+                document.getElementById('checksignature-image').src = src
+                document.getElementById('checksignature-image').width = 100;
+                document.getElementById('checksignature-image').height = 100;
+            });
+
+            listener('account-holder-save','click',function(e){
+                localStorage.setItem('account-holder-name', id('account-holder-name').value);
+                localStorage.setItem('account-holder-address', id('account-holder-address').value);
+                localStorage.setItem('account-holder-csz', id('account-holder-csz').value);
+                hide('account-holder-dialog');
+            });
+            
+            listener('addbank','click',function(e){
+                show('new-bank-dialog');
+            });
+
+            listener('addrecipient','click',function(e){
+                show('recipient-dialog');
+            });
+            listener('recipient-save','click', function(e){
+                var params = {
+                    $name: id('recipient-name').value,
+                    $line_1: id('recipient-line-1').value,
+                    $line_2: id('recipient-line-2').value,
+                    $city: id('recipient-city').value,
+                    $state: id('recipient-state').value,
+                    $zip: id('recipient-zip').value,
+                    $country: id('recipient-country').value
+                };
+                hide('recipient-dialog');
+                SendIPC('newRecipient', params, 
+                    function(channel,event,data){
+                        showAlert('success','Recipient Status','Recipient added successfully!', 
+                            function(){
+                                window.location.reload();
+                            });
+                    });
+            });
+
+            listener('import-bank-accounts','click',function(e){
+                hide('new-bank-dialog');
+                SendIPC('importBankAccounts', {}, 
+                    function(channel, event, data){
+                        window.location.reload();
+                    });
+            });
+
+
+            listener('printsendcheck','click',function(){
+                var checkpayee = id('checkpayee');
+                var recipients = id(checkpayee.getAttribute('list'));
+                if (recipient) {
+                    //var attr = id('bank');
+                    var bank = id('bank').options[id('bank').options.selectedIndex];
+                    var attr = JSON.parse(atob(bank.getAttribute('data-bank')));
+                    var params = {
+                            id: attr.id,
+                            date: id('checkdate').value,
+                            image: '',
+                            recipient: {
+                                line_1: recipient.line_1,
+                                line_2: recipient.line_2,
+                                city: recipient.city,
+                                state: recipient.state,
+                                zip: recipient.zip,
+                                country: recipient.country
+                            },
+                            name: id('checkpayee').value,
+                            amount: Number(id('checkamount').value),
+                            description: id('checkmemo').value,
+                            number: attr.nextnumber,
+                            account: attr.number,
+                            routing: attr.routing,
+                            type: "CHECKING"                            
+                        };
+
+                    if (attr.checkbookio_id) {
+                        SendIPC('createPhysicalCheck',params,
+                            function(channel,event,data){
+                                window.location.reload();
+                            });
+                    } else {
+                        SendIPC('newCheckRegisterEntry', params, 
+                            function(channel, event, data){
+                                console.log(data);
+                                showAlert('error','Check Creation Error','Only bank accounts registered through checkbook.io are permitted to create a physical check but entry was made to the check register?', 
+                                    function(){
+                                        window.location.reload();
+                                    });
+                            });
+                    }
+                }
+            });
+
+            function updatePayee(obj) {
+                var recipients = id(obj.getAttribute('list'));
+
+                for(var i=0; i<recipients.options.length; i++) {
+                    var option = recipients.options[i];
+                    if (option.value == obj.value) {
+                        recipient = JSON.parse(atob(option.getAttribute('data-recipient')));
+                    }
+                }
+            }
+
+            function changeBank(element) {
+                if (element.selectedIndex > 0) {
+                    var selectedOption = element.options[element.selectedIndex];
+                    var bank = JSON.parse(atob(selectedOption.getAttribute('data-bank')));
+                    console.log(bank);
+                    id('bankinfo').innerHTML = bank.bankname + '<br/>' + bank.bankaddress + '<br/>' + bank.bankcsz;
+                    id('bank-balance').value = bank.balance;
+                    id('checkno').value = bank.nextnumber;
+
+                    id('checkrouting').innerHTML = '<img src="../assets/svgs/u2446.svg" style="width:5%;height:5%;">';
+                    for (var i=0; i<bank.routing.length; i++) {
+                        var num = bank.routing[i];
+                        id('checkrouting').innerHTML += `<img src="../assets/svgs/u003${num}.svg" style="width:5%;height:5%;">&nbsp;`;
+                    }
+                    id('checkaccount').innerHTML = '<img src="../assets/svgs/u2446.svg" style="width:5%;height:5%;">';
+                    for (var i=0; i<bank.number.length; i++) {
+                        var num = bank.number[i];
+                        id('checkaccount').innerHTML += `<img src="../assets/svgs/u003${num}.svg" style="width:5%;height:5%;">&nbsp;`;
+                    }
+
+                    SendIPC('getRegister', {account: bank.id}, function(channel, event, data){
+                        console.log(data);
+                        id('checkregister-table').innerHTML = '<tr><th>Date</th><th>No</th><th>Payee/Description</th><th>Amount</th></tr>';
+                        data.forEach(function(item){
+                            var _item = btoa(JSON.stringify(item));
+                            id('checkregister-table').innerHTML += `<tr>
+                                                                        <td>${item.date}</td>
+                                                                        <td>${item.no}</td>
+                                                                        <td>${item.payee}</td>
+                                                                        <td>${item.amount}</td>
+                                                                    </tr>`;
+                        });
+                    });
+                } else {
+                    id('bankinfo').innerHTML = 'Bank Name<br/>Bank Address<br/>City, State, Zip';
+                    id('bank-balance').value = 0.00;
+                    id('checkno').value = 1001;
+                    id('checkregister-table').innerHTML = '<tr><th>Date</th><th>No</th><th>Payee/Description</th><th>Amount</th></tr>';
+                }
+            }
+
+            /**
+             * From http://www.swecsoftware.com/blog/2012/2/converting-a-number-to-written-text
+             **/
+            function nbr2txt(number) {
+                if (typeof(number) == "string") {
+                    var currency = number;
+                    //convert if string, remove dollar sign, commas
+                    number = currency.replace(/[^0-9\.]+/g,"");
+                }
+
+                var ones = new Array("", "One", "Two", "Three", "Four", "Five", "Six", "Seven", 
+                                    "Eight","Nine", "Ten",
+                                    "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", 
+                                    "Sixteen", "Seventeen", "Eighteen", "Nineteen");
+                var tens = new Array("", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", 
+                                    "Seventy", "Eighty", "Ninety");
+
+                var cents = number - (Math.floor(number));
+                cents = Math.round(cents * 100);
+                var nbr = Math.floor(number);
+
+                var tn = Math.floor(nbr / 1000000000000);
+                nbr -= tn * 1000000000000;
+                var bn = Math.floor(nbr / 1000000000);
+                nbr -= bn * 1000000000;
+                var gn = Math.floor(nbr / 1000000);
+                nbr -= gn * 1000000;
+                var kn = Math.floor(nbr / 1000);
+                nbr -= kn * 1000;
+                var hn = Math.floor(nbr / 100);
+                nbr -= hn * 100;
+                var dn = Math.floor(nbr / 10);
+                nbr -= dn * 10;
+                var n = nbr % 10;
+
+                var res = "";
+                if (tn) {
+                    res += (res.length == 0 ? "" : " ") + nbr2txt(tn) + " Trillion";
+                }
+                if (bn) {
+                    res += (res.length == 0 ? "" : " ") + nbr2txt(bn) + " Billion";
+                }
+                if (gn) {
+                    res += (res.length == 0 ? "" : " ") + nbr2txt(gn) + " Million";
+                }
+                if (kn) {
+                    res += (res.length == 0 ? "" : " ") + nbr2txt(kn) + " Thousand";
+                }
+                if (hn) {
+                    res += (res.length == 0 ? "" : " ") + nbr2txt(hn) + " Hundred";
+                }
+
+                if (dn || n) {
+                    if (res.length > 0) {
+                        res += " ";
+                    }
+                    if (dn < 2) {
+                        res += ones[dn * 10 + n];
+                    }
+                    else {
+                        res += tens[dn];
+                        if (n) {
+                            res += "-" + ones[n];
+                        }
+                    }
+                }
+                if (cents) {
+                    //res += (res.length == 0 ? "" : " and ") + nbr2txt(cents) + " Cents";
+                    res += " and " + cents + "/100";
+                }
+                if (res.length == 0) {
+                    res = "00/100";
+                }
+
+                return res;
+            }
+
+        </script>
+    </body>
+</html>
