@@ -1,6 +1,6 @@
 {
   "name": "checkbook-writer",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Checkbook is a self-contained API server. Back in the early 1980's, I developed a Checkwriter device using a two line alpha numeric LCD display, a small QWERTY keyboard and an embedded ink jet printer with sealed check cartridge to print the check and eject. There was no internet nor any smart phones or IOT devices. This project is a reconcilation of that project using current technology.",
   "main": "app.js",
   "build": {
@@ -31,7 +31,8 @@
     "pack-armv7l": "electron-builder --dir --armv7l",
     "dist-armv7l": "electron-builder --armv7l",
     "pack-macos": "electron-builder --dir --macos",
-    "postinstall": "electron-builder install-app-deps"
+    "postinstall": "electron-builder install-app-deps",
+    "doc": "apidoc -i ./ -o ./views/doc/"
   },
   "repository": {
     "type": "git",
